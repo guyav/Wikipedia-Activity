@@ -13,5 +13,14 @@ namespace WikipediaActivity
         int changesDelta;
         int numberOfTalkChanges;
         int talkChangesDelta;
+
+        public ArticleData(string name, int numberOfChanges, int changesDelta, int numberOfTalkChanges, int talkChangesDelta)
+        {
+            this.name = name;
+            this.numberOfChanges = numberOfChanges;
+            this.changesDelta = changesDelta;
+            this.numberOfTalkChanges = numberOfTalkChanges;
+            this.talkChangesDelta = talkChangesDelta;
+        }
     }
 }
