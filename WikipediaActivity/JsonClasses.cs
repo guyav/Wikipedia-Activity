@@ -24,6 +24,7 @@ namespace WikipediaActivity
         public string title { get; set; }
         public int oldlen { get; set; }
         public int newlen { get; set; }
+        public DateTime timestamp { get; set; }
     }
 
     public class Query
