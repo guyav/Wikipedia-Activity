@@ -20,14 +20,14 @@ namespace WikipediaActivity
         static List<ArticleData> GetDayHistory(string baseUri)
         {
             string resource = "/w/api.php?action=query&format=json&list=recentchanges&utf8=1&rcnamespace=1|0&rcprop=title|sizes|timestamp&rclimit=max";
-            IRestResponse<RecentChanges.RootObject> result = ExecuteQuery(baseUri, resource);
+            IRestResponse<RecentChanges.RootObject> result = ExecuteRecentChangesQuery(baseUri, resource);
             List<RecentChanges.Recentchange> recentChanges = result.Data.query.recentchanges;
 
             while (result.Data.query.recentchanges.Last().timestamp.ToLocalTime() > DateTime.Now.Subtract(new TimeSpan(24, 0, 0)))
             {
                 // need to execute another query
                 string rccontinue = result.Data.@continue.rccontinue;
-                result = ExecuteQuery(baseUri, resource + "&rccontinue=" + rccontinue);
+                result = ExecuteRecentChangesQuery(baseUri, resource + "&rccontinue=" + rccontinue);
                 recentChanges.AddRange(result.Data.query.recentchanges);
             }
 
@@ -52,7 +52,7 @@ namespace WikipediaActivity
             return articles;
         }
 
-        private static IRestResponse<RecentChanges.RootObject> ExecuteQuery(string baseUri, string resource)
+        private static IRestResponse<RecentChanges.RootObject> ExecuteRecentChangesQuery(string baseUri, string resource)
         {
             var client = new RestClient(baseUri);
             var request = new RestRequest(resource, Method.GET);
