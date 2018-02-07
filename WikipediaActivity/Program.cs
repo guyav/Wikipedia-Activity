@@ -17,13 +17,14 @@ namespace WikipediaActivity
             }
             return recentchange.title;
         }
+
         static List<ArticleData> GetDayHistory(string baseUri)
         {
             string resource = "/w/api.php?action=query&format=json&list=recentchanges&utf8=1&rcnamespace=1|0&rcprop=title|sizes|timestamp&rclimit=max";
             IRestResponse<RecentChanges.RootObject> result = ExecuteRecentChangesQuery(baseUri, resource);
             List<RecentChanges.Recentchange> recentChanges = result.Data.query.recentchanges;
 
-            while (result.Data.query.recentchanges.Last().timestamp.ToLocalTime() > DateTime.Now.Subtract(new TimeSpan(24, 0, 0)))
+            while (result.Data.query.recentchanges.Last().timestamp.ToLocalTime() > DateTime.Now.Subtract(new TimeSpan(48, 0, 0)))
             {
                 // need to execute another query
                 string rccontinue = result.Data.@continue.rccontinue;
@@ -52,6 +53,14 @@ namespace WikipediaActivity
             return articles;
         }
 
+        static List<string> ArticlesInCategory(string baseUri, string category)
+        {
+            string resource = string.Format("/w/api.php?action=query&format=json&list=categorymembers&utf8=1&cmtitle={0}&cmprop=title&cmnamespace=0&cmlimit=max", category);
+            IRestResponse<CategoryMembers.RootObject> result = ExecuteCategoryMembersQuery(baseUri, resource);
+            List<CategoryMembers.Categorymember> categoryMembers = result.Data.query.categorymembers;
+            return categoryMembers.Select(x => x.title).ToList();
+        }
+
         private static IRestResponse<RecentChanges.RootObject> ExecuteRecentChangesQuery(string baseUri, string resource)
         {
             var client = new RestClient(baseUri);
@@ -60,9 +69,39 @@ namespace WikipediaActivity
             return result;
         }
 
+        private static IRestResponse<CategoryMembers.RootObject> ExecuteCategoryMembersQuery(string baseUri, string resource)
+        {
+            var client = new RestClient(baseUri);
+            var request = new RestRequest(resource, Method.GET);
+            IRestResponse<CategoryMembers.RootObject> result = client.Execute<CategoryMembers.RootObject>(request);
+            return result;
+        }
+
         static void Main(string[] args)
         {
-            GetDayHistory("https://he.wikipedia.org");
+            string baseUri = "https://he.wikipedia.org";
+            List<ArticleData> historyArticles = GetDayHistory(baseUri);
+
+            List<string> notabilityArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: ערכים שיש להבהיר את מעמדם");
+            foreach(string notabilityArticle in notabilityArticles)
+            {
+                ArticleData foundArticle = historyArticles.Find(x => x.name == notabilityArticle);
+                if (foundArticle==null)
+                {
+                    continue;
+                }
+                foundArticle.inNotabilityCategory = true;
+            }
+            List<string> deletionArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: הצבעות מחיקה");
+            foreach (string deletionArticle in deletionArticles)
+            {
+                ArticleData foundArticle = historyArticles.Find(x => x.name == deletionArticle);
+                if (foundArticle == null)
+                {
+                    continue;
+                }
+                foundArticle.inDeletionCategory = true;
+            }
         }
     }
 }
