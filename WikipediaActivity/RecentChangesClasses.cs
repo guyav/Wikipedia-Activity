@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WikipediaActivity
+namespace WikipediaActivity.RecentChanges
 {
     public class Continue
     {
