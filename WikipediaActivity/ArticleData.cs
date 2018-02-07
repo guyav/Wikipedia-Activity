@@ -22,5 +22,9 @@ namespace WikipediaActivity
             this.numberOfTalkChanges = numberOfTalkChanges;
             this.talkChangesDelta = talkChangesDelta;
         }
+        public override string ToString()
+        {
+            return this.name;
+        }
     }
 }
