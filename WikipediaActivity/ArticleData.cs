@@ -13,6 +13,8 @@ namespace WikipediaActivity
         int changesDelta;
         int numberOfTalkChanges;
         int talkChangesDelta;
+        bool inNotabilityCategory;
+        bool inDeletionCategory;
 
         public ArticleData(string name, int numberOfChanges, int changesDelta, int numberOfTalkChanges, int talkChangesDelta)
         {
@@ -22,6 +24,7 @@ namespace WikipediaActivity
             this.numberOfTalkChanges = numberOfTalkChanges;
             this.talkChangesDelta = talkChangesDelta;
         }
+
         public override string ToString()
         {
             return this.name;
