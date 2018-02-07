@@ -50,7 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArticleData.cs" />
-    <Compile Include="JsonClasses.cs" />
+    <Compile Include="CategoryMembersClasses.cs" />
+    <Compile Include="RecentChangesClasses.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
