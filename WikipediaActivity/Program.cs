@@ -9,7 +9,7 @@ namespace WikipediaActivity
 {
     class Program
     {
-        static string GetKeyFromTitle(Recentchange recentchange)
+        static string GetKeyFromTitle(RecentChanges.Recentchange recentchange)
         {
             if (recentchange.title.StartsWith("שיחה:"))
             {
@@ -20,8 +20,8 @@ namespace WikipediaActivity
         static List<ArticleData> GetDayHistory(string baseUri)
         {
             string resource = "/w/api.php?action=query&format=json&list=recentchanges&utf8=1&rcnamespace=1|0&rcprop=title|sizes|timestamp&rclimit=max";
-            IRestResponse<RootObject> result = ExecuteQuery(baseUri, resource);
-            List<Recentchange> recentChanges = result.Data.query.recentchanges;
+            IRestResponse<RecentChanges.RootObject> result = ExecuteQuery(baseUri, resource);
+            List<RecentChanges.Recentchange> recentChanges = result.Data.query.recentchanges;
 
             while (result.Data.query.recentchanges.Last().timestamp.ToLocalTime() > DateTime.Now.Subtract(new TimeSpan(24, 0, 0)))
             {
@@ -52,11 +52,11 @@ namespace WikipediaActivity
             return articles;
         }
 
-        private static IRestResponse<RootObject> ExecuteQuery(string baseUri, string resource)
+        private static IRestResponse<RecentChanges.RootObject> ExecuteQuery(string baseUri, string resource)
         {
             var client = new RestClient(baseUri);
             var request = new RestRequest(resource, Method.GET);
-            IRestResponse<RootObject> result = client.Execute<RootObject>(request);
+            IRestResponse<RecentChanges.RootObject> result = client.Execute<RecentChanges.RootObject>(request);
             return result;
         }
 
