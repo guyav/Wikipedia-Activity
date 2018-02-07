@@ -8,13 +8,13 @@ namespace WikipediaActivity
 {
     class ArticleData
     {
-        string name;
-        int numberOfChanges;
-        int changesDelta;
-        int numberOfTalkChanges;
-        int talkChangesDelta;
-        bool inNotabilityCategory;
-        bool inDeletionCategory;
+        public string name { get; private set; }
+        public int numberOfChanges { get; private set; }
+        public int changesDelta { get; private set; }
+        public int numberOfTalkChanges { get; private set; }
+        public int talkChangesDelta { get; private set; }
+        public bool inNotabilityCategory { get; set; }
+        public bool inDeletionCategory { get; set; }
 
         public ArticleData(string name, int numberOfChanges, int changesDelta, int numberOfTalkChanges, int talkChangesDelta)
         {
