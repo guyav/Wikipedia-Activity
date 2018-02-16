@@ -24,7 +24,7 @@ namespace WikipediaActivity
             IRestResponse<RecentChanges.RootObject> result = ExecuteRecentChangesQuery(baseUri, resource);
             List<RecentChanges.Recentchange> recentChanges = result.Data.query.recentchanges;
 
-            while (result.Data.query.recentchanges.Last().timestamp.ToLocalTime() > DateTime.Now.Subtract(new TimeSpan(48, 0, 0)))
+            while (result.Data.query.recentchanges.Last().timestamp.ToLocalTime() > DateTime.Now.Subtract(new TimeSpan(24, 0, 0)))
             {
                 // need to execute another query
                 string rccontinue = result.Data.@continue.rccontinue;
@@ -85,22 +85,22 @@ namespace WikipediaActivity
             List<string> notabilityArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: ערכים שיש להבהיר את מעמדם");
             foreach(string notabilityArticle in notabilityArticles)
             {
-                ArticleData foundArticle = historyArticles.Find(x => x.name == notabilityArticle);
+                ArticleData foundArticle = historyArticles.Find(x => x.Name == notabilityArticle);
                 if (foundArticle==null)
                 {
                     continue;
                 }
-                foundArticle.inNotabilityCategory = true;
+                foundArticle.InNotabilityCategory = true;
             }
             List<string> deletionArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: הצבעות מחיקה");
             foreach (string deletionArticle in deletionArticles)
             {
-                ArticleData foundArticle = historyArticles.Find(x => x.name == deletionArticle);
+                ArticleData foundArticle = historyArticles.Find(x => x.Name == deletionArticle);
                 if (foundArticle == null)
                 {
                     continue;
                 }
-                foundArticle.inDeletionCategory = true;
+                foundArticle.InDeletionCategory = true;
             }
         }
     }
