@@ -106,6 +106,17 @@ namespace WikipediaActivity
                 }
                 foundArticle.InDeletionCategory = true;
             }
+
+            List<string> controversialArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: ערכים שנויים במחלוקת");
+            foreach (string controversialArticle in controversialArticles)
+            {
+                ArticleData foundArticle = historyArticles.Find(x => x.Name == controversialArticle);
+                if (foundArticle == null)
+                {
+                    continue;
+                }
+                foundArticle.InControversialCategory = true;
+            }
         }
     }
 }
