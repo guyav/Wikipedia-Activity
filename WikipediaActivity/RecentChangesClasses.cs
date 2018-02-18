@@ -25,6 +25,7 @@ namespace WikipediaActivity.RecentChanges
         public int oldlen { get; set; }
         public int newlen { get; set; }
         public DateTime timestamp { get; set; }
+        public List<string> tags { get; set; }
     }
 
     public class Query

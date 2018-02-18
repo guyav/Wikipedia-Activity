@@ -20,7 +20,7 @@ namespace WikipediaActivity
 
         static List<ArticleData> GetDayHistory(string baseUri)
         {
-            string resource = "/w/api.php?action=query&format=json&list=recentchanges&utf8=1&rcnamespace=1|0&rcprop=title|sizes|timestamp&rclimit=max";
+            string resource = "/w/api.php?action=query&format=json&list=recentchanges&utf8=1&rcnamespace=1|0&rcprop=title|sizes|timestamp|tags&rclimit=max";
             IRestResponse<RecentChanges.RootObject> result = ExecuteRecentChangesQuery(baseUri, resource);
             List<RecentChanges.Recentchange> recentChanges = result.Data.query.recentchanges;
 
@@ -92,6 +92,7 @@ namespace WikipediaActivity
                 }
                 foundArticle.InNotabilityCategory = true;
             }
+
             List<string> deletionArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: הצבעות מחיקה");
             foreach (string deletionArticle in deletionArticles)
             {
