@@ -39,14 +39,17 @@ namespace WikipediaActivity
             {
                 var talkEntries = group.Where(x => x.title.StartsWith("שיחה:")).ToList();
                 var nonTalkEntries = group.Where(x => !x.title.StartsWith("שיחה:")).ToList();
+                var rollbackEntries = group.Where(x => x.tags.Contains("mw-rollback"));
 
-                int talkChange = talkEntries.Sum(x => Math.Abs(x.newlen - x.oldlen));
-                int nontTalkChange = nonTalkEntries.Sum(x => Math.Abs(x.newlen - x.oldlen));
+                int talkDelta = talkEntries.Sum(x => Math.Abs(x.newlen - x.oldlen));
+                int nonTalkDelta = nonTalkEntries.Sum(x => Math.Abs(x.newlen - x.oldlen));
                 int talkCount = talkEntries.Count();
-                int mainCount = nonTalkEntries.Count();
+                int nonTalkCount = nonTalkEntries.Count();
+                int rollbacksCount = rollbackEntries.Count();
+                int rollbacksDelta = rollbackEntries.Sum(x => Math.Abs(x.newlen - x.oldlen));
                 string name = group.Key;
 
-                ArticleData article = new ArticleData(name, nontTalkChange, mainCount, talkCount, talkChange);
+                ArticleData article = new ArticleData(name, nonTalkCount, nonTalkDelta, talkCount, talkDelta, rollbacksCount, rollbacksDelta);
                 articles.Add(article);
 
             }
@@ -83,10 +86,10 @@ namespace WikipediaActivity
             List<ArticleData> historyArticles = GetDayHistory(baseUri);
 
             List<string> notabilityArticles = ArticlesInCategory(baseUri, "קטגוריה:ויקיפדיה: ערכים שיש להבהיר את מעמדם");
-            foreach(string notabilityArticle in notabilityArticles)
+            foreach (string notabilityArticle in notabilityArticles)
             {
                 ArticleData foundArticle = historyArticles.Find(x => x.Name == notabilityArticle);
-                if (foundArticle==null)
+                if (foundArticle == null)
                 {
                     continue;
                 }
